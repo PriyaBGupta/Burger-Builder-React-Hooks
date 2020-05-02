@@ -1,19 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect , Suspense } from 'react';
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './container/BurgerBuilder/BurgerBuilder';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import Logout from './container/Auth/Logout/Logout';
 import { connect } from 'react-redux';
 import * as action from './store/action/index';
-import asyncComponent from './hoc/asyncComponent/asyncComponent';
+
 //Lazy loading of modules  when they are required
-const asyncCheckout = asyncComponent(() => {
+const Checkout = React.lazy(() => {
 	return import('./container/Checkout/Checkout');
 })
-const asyncOrder = asyncComponent(() => {
+const Order = React.lazy(() => {
 	return import('./container/Orders/Orders');
 })
-const asyncAuth = asyncComponent(() => {
+const Auth = React.lazy(() => {
 	return import('./container/Auth/Auth');
 })
 
@@ -25,16 +25,16 @@ const App = (props) => {
 	// Here Redirect component adds gaurds to all the route which are not present at that time
 		let routes =
 			(<Switch>
-				<Route path="/auth" component={asyncAuth} />
+				<Route path="/auth" render={()=><Auth/>} />
 				<Route path="/" exact component={BurgerBuilder} />
 				<Redirect to="/" />
 			</Switch>)
 		if (props.isAuthenticated) {
 			routes = <Switch>
-				<Route path="/checkout" component={asyncCheckout} />
-				<Route path="/orders" component={asyncOrder} />
+				<Route path="/checkout" render={()=><Checkout/>} />
+				<Route path="/orders" render={()=><Order/>} />
 				<Route path="/logout" component={Logout} />
-				<Route path="/auth" component={asyncAuth} />
+				<Route path="/auth" render={()=><Auth/>} />
 				<Route path="/" exact component={BurgerBuilder} />
 				<Redirect to="/" />
 			</Switch>
@@ -42,7 +42,7 @@ const App = (props) => {
 		return (
 			<div className="App">
 				<Layout>
-					{routes}
+					<Suspense fallback={<p>..Loading</p>}>{routes}</Suspense>
 				</Layout>
 			</div>
 		);
