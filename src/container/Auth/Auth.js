@@ -9,7 +9,7 @@ import { Redirect } from 'react-router-dom';
 import { updateObject, checkValidity } from '../../shared/utility';
 
 const Auth = (props) => {
-
+    const {buildingBurger,authRedirectPath, onSetAuthRedirectPath} = props;
     const [control, setControl] = useState({
         email: {
             elementType: 'input',
@@ -61,11 +61,11 @@ const Auth = (props) => {
         setIsSignUp(!isSignup);
     }
     useEffect(() => {
-        if (!props.buildingBurger && props.authRedirectPath !== '/') {
+        if (!buildingBurger && authRedirectPath !== '/') {
             //to prevent checkout getting called even though burger is not built
-            props.onSetAuthRedirectPath();
+            onSetAuthRedirectPath();
         }
-    }, [])
+    }, [buildingBurger, authRedirectPath, onSetAuthRedirectPath])
     const formElementArray = [];
     for (let key in control) {
         formElementArray.push({

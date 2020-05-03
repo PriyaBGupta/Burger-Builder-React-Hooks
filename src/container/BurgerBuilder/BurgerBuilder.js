@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import * as action from '../../store/action/index';
 
 const BurgerBuilder = (props) => {
-
+    const {onInitIngredients} = props;
     const [purchasing, setPurchasing] = useState(false);
     const purschaseHandler = () => {
         if (props.isAuthenticate) {
@@ -41,8 +41,8 @@ const BurgerBuilder = (props) => {
         return sum > 0;
     }
     useEffect(() => {
-        props.onInitIngredients();
-    }, [])
+        onInitIngredients();
+    }, [onInitIngredients])
     const disabledInfo = { ...props.ings };
     for (let key in disabledInfo) {
         disabledInfo[key] = disabledInfo[key] <= 0;
