@@ -1,4 +1,4 @@
-import React, { useEffect , Suspense } from 'react';
+import React, { useEffect, Suspense } from 'react';
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './container/BurgerBuilder/BurgerBuilder';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
@@ -23,29 +23,29 @@ const App = (props) => {
 	}, [props])
 
 	// Here Redirect component adds gaurds to all the route which are not present at that time
-		let routes =
-			(<Switch>
-				<Route path="/auth" render={()=><Auth/>} />
-				<Route path="/" exact component={BurgerBuilder} />
-				<Redirect to="/" />
-			</Switch>)
-		if (props.isAuthenticated) {
-			routes = <Switch>
-				<Route path="/checkout" render={()=><Checkout/>} />
-				<Route path="/orders" render={()=><Order/>} />
-				<Route path="/logout" component={Logout} />
-				<Route path="/auth" render={()=><Auth/>} />
-				<Route path="/" exact component={BurgerBuilder} />
-				<Redirect to="/" />
-			</Switch>
-		}
-		return (
-			<div className="App">
-				<Layout>
-					<Suspense fallback={<p>..Loading</p>}>{routes}</Suspense>
-				</Layout>
-			</div>
-		);
+	let routes =
+		(<Switch>
+			<Route path="/auth" render={props => <Auth {...props} />} />
+			<Route path="/" exact component={BurgerBuilder} />
+			<Redirect to="/" />
+		</Switch>)
+	if (props.isAuthenticated) {
+		routes = <Switch>
+			<Route path="/checkout" render={props => <Checkout {...props} />} />
+			<Route path="/orders" render={props => <Order {...props} />} />
+			<Route path="/logout" component={Logout} />
+			<Route path="/auth" render={props => <Auth {...props} />} />
+			<Route path="/" exact component={BurgerBuilder} />
+			<Redirect to="/" />
+		</Switch>
+	}
+	return (
+		<div className="App">
+			<Layout>
+				<Suspense fallback={<p>..Loading</p>}>{routes}</Suspense>
+			</Layout>
+		</div>
+	);
 }
 
 const mapDispatchToProps = dispatch => {
